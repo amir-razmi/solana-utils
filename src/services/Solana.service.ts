@@ -27,7 +27,7 @@ type ISolanaServiceConstructor = {
   feeAmount?: { withdraw: number; unavailableTokenAccount: number };
 };
 
-export class SolanaService {
+export class SolanaUtils {
   solanaConnection: Connection;
   metaplex: Metaplex;
   private ownerWallet?: { publicKey: PublicKey; keypair: Keypair };
