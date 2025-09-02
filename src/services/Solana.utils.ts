@@ -13,7 +13,7 @@ import bs58 from "bs58";
 import tweetnacl from "tweetnacl";
 import { IToken } from "../types/token.type";
 import { ISolConfirmedTransaction } from "../types/solanaTransaction.type";
-import { sleep } from "../utils/sleep.util";
+import { sleep } from "../utils/sleep";
 import { SOL_MINT_ADDRESS } from "../constants/sol.constant";
 
 type ITransferSolanaTokenInput = {
