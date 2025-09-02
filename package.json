@@ -8,6 +8,9 @@
   "repository": {
     "url": "https://github.com/amir-razmi/solana-utils"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup"
   },
