@@ -9,6 +9,7 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import bs58 from "bs58";
+import { IRPCProviders } from "../types/rpcProviders.type";
 import { IToken } from "../types/token.type";
 import { isSOL } from "../utils/isSol.util";
 import { sleep } from "../utils/sleep";
@@ -21,7 +22,12 @@ type ITransferSolanaTokenInput = {
 
 export default class TransferService {
   private ownerWallet?: { publicKey: PublicKey; keypair: Keypair };
-  constructor(private solanaConnection: Connection, ownerWallet: IWallet) {
+
+  constructor(
+    private solanaConnection: Connection,
+    ownerWallet: IWallet,
+    private rpcProvider: IRPCProviders
+  ) {
     if (ownerWallet) {
       this.ownerWallet = {
         publicKey: new PublicKey(ownerWallet.publicKey),
@@ -29,7 +35,8 @@ export default class TransferService {
       };
     }
   }
-  async generateTokenTransferInstruction(
+
+  private async generateTokenTransferInstruction(
     token: IToken,
     amount: number,
     ownerPublicKey: PublicKey,
@@ -85,7 +92,7 @@ export default class TransferService {
 
     return instruction;
   }
-  generateSOLTransferInstruction(
+  private generateSOLTransferInstruction(
     amount: number,
     ownerPublicKey: PublicKey,
     to: string
@@ -145,11 +152,23 @@ export default class TransferService {
       transaction.lastValidBlockHeight = blockhash.value.lastValidBlockHeight;
       transaction.feePayer = ownerPublicKey;
       transaction.sign(ownerKeypair);
-      const transactionSignature = await sendAndConfirmTransaction(
-        this.solanaConnection,
-        transaction,
-        [ownerKeypair]
-      );
+
+      let transactionSignature;
+
+      if (this.rpcProvider === "alchemy") {
+        transactionSignature = await this.solanaConnection.sendTransaction(
+          transaction,
+          [ownerKeypair],
+          { skipPreflight: false }
+        );
+        await this.confirmTransactionManually(transactionSignature);
+      } else {
+        transactionSignature = await sendAndConfirmTransaction(
+          this.solanaConnection,
+          transaction,
+          [ownerKeypair]
+        );
+      }
 
       return {
         txHash: transactionSignature,
@@ -158,5 +177,25 @@ export default class TransferService {
       console.error(error);
       throw error;
     }
+  }
+
+  private async confirmTransactionManually(txHash: string) {
+    let confirmed = false;
+    for (let i = 0; i < 10; i++) {
+      const status = await this.solanaConnection.getSignatureStatus(txHash, {
+        searchTransactionHistory: true,
+      });
+
+      if (
+        status.value?.confirmationStatus === "confirmed" ||
+        status.value?.confirmationStatus === "finalized"
+      ) {
+        confirmed = true;
+        break;
+      } else {
+        await sleep(6000);
+      }
+    }
+    if (!confirmed) throw new Error("Transaction not confirmed");
   }
 }
