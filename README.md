@@ -33,12 +33,12 @@ import { SolanaUtils } from "@amir-razmi/solana-utils";
 // Create SolanaUtils instance
 export const solanaUtils = new SolanaUtils({
   rpcProvider: process.env.SOLANA_RPC_PROVIDER,
-  ownerWallet: {
+  solanaRPCUrl: process.env.SOLANA_RPC_URL,
+  ownerWallet: { //Optional
     privateKey: process.env.OWNER_SOLANA_WALLET_PRIVATE_KEY,
     publicKey: process.env.OWNER_SOLANA_WALLET_ADDRESS,
   },
-  solanaRPCUrl: process.env.SOLANA_RPC_URL,
-  feeAmount: {
+  feeAmount: { //Optional
     unavailableTokenAccount: 21e5,
     withdraw: 15e4,
   },
