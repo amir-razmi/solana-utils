@@ -25,8 +25,8 @@ export default class TransferService {
 
   constructor(
     private solanaConnection: Connection,
-    ownerWallet: IWallet,
-    private rpcProvider: IRPCProviders
+    private rpcProvider: IRPCProviders,
+    ownerWallet?: IWallet
   ) {
     if (ownerWallet) {
       this.ownerWallet = {

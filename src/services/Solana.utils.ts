@@ -13,7 +13,7 @@ export type IFeeAmount = { withdraw: number; unavailableTokenAccount: number };
 type ISolanaServiceConstructor = {
   rpcProvider: IRPCProviders;
   solanaRPCUrl: string;
-  ownerWallet: IWallet;
+  ownerWallet?: IWallet;
   feeAmount?: IFeeAmount;
 };
 
@@ -35,7 +35,7 @@ export class SolanaUtils {
     });
 
     this.transactions = new TransactionService(solanaConnection);
-    this.transfers = new TransferService(solanaConnection, ownerWallet, rpcProvider);
+    this.transfers = new TransferService(solanaConnection, rpcProvider, ownerWallet);
     this.tokenAccounts = new TokenAccountService(solanaConnection);
     this.nfts = new NftService(solanaConnection);
     this.fees = new FeeService(this.tokenAccounts, feeAmount);
