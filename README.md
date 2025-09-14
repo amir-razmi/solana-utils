@@ -58,3 +58,36 @@ export const solanaUtils = new SolanaUtils({
   );
 })();
 ```
+
+## 📚 API Reference
+
+Below are the main services and their methods.
+
+### **transactions**
+- `getTransactionData(signature: string)`
+- `parseSOLTransferHash(signature: string)`
+- `parseTokenTransferHash(signature: string)`
+- `validateSignature(signature: string)`
+
+### **transfers**
+- `transferTokens(sender, recipient, mint, amount)`
+
+### **tokenAccounts**
+- `walletHaveAssociatedTokenAccount(wallet: string, mint: string)`
+- `generateAssociatedTokenAccount(wallet: string, mint: string)`
+- `getTokenBalance(wallet: string, mint: string)`
+- `isSOL(mint: string)`
+
+### **nfts**
+- `getWalletNftList(wallet: string)`
+
+### **fees**
+- `calculateWithdrawFee()`
+
+## 🛠 TypeScript Support
+This package is **built with TypeScript** and ships with type definitions — designed for both JavaScript and TypeScript projects.
+
+## 💡 Author
+**Amirmohammad Razmi** — Node.js Backend Developer & Blockchain Enthusiast  
+[GitHub](https://github.com/amirm-razmi) • [LinkedIn](https://www.linkedin.com/in/amir-mohammad-razmi-b85602217/) • [NPM](https://www.npmjs.com/~amir-razmi)
+
