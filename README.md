@@ -1,1 +1,60 @@
-# solana-utils
+# @amir-razmi/solana-utils 🔗
+
+A lightweight, **TypeScript-first** utility library for interacting with the **Solana blockchain**.  
+It bundles multiple services — **transactions**, **transfers**, **token accounts**, **NFTs**, and **fees** — into a single, easy-to-use class.
+
+Ideal for developers building wallets, NFT marketplaces, DeFi tools, or other Solana-powered projects.
+
+---
+
+## ✨ Features
+- 🪙 **Token Operations** — Manage balances & associated token accounts.
+- 🖼 **NFT Tools** — Retrieve NFTs owned by a wallet.
+- 💰 **Fee Calculations** — Built-in withdraw and ATA creation fee estimations.
+- ⛓ **Transaction Parsing** — Understand both SOL & SPL token transfer activity.
+- 🛠 **Structured API** — Access grouped services via `.transactions`, `.transfers`, `.tokenAccounts`, `.nfts`, `.fees`.
+- 📦 **TypeScript Ready** — Full typings for an autocomplete-powered development experience.
+
+---
+
+## 📦 Installation
+```bash
+npm install @amir-razmi/solana-utils
+# or
+yarn add @amir-razmi/solana-utils
+# or
+pnpm add @amir-razmi/solana-utils
+```
+
+### ⚡ Quick Usage
+```javascript
+import { SolanaUtils } from "@amir-razmi/solana-utils";
+
+// Create SolanaUtils instance
+export const solanaUtils = new SolanaUtils({
+  rpcProvider: process.env.SOLANA_RPC_PROVIDER,
+  ownerWallet: {
+    privateKey: process.env.OWNER_SOLANA_WALLET_PRIVATE_KEY,
+    publicKey: process.env.OWNER_SOLANA_WALLET_ADDRESS,
+  },
+  solanaRPCUrl: process.env.SOLANA_RPC_URL,
+  feeAmount: {
+    unavailableTokenAccount: 21e5,
+    withdraw: 15e4,
+  },
+});
+
+// Example 1 — Get a wallet's NFT list
+(async () => {
+  const nfts = await solanaUtils.nfts.getWalletNftList("WALLET_PUBLIC_KEY");
+  console.log(nfts);
+})();
+
+// Example 2 — Get Token Balance
+(async () => {
+  await solanaUtils.tokenAccounts.getTokenBalance(
+    "YOUR_PUBLIC_KEY",
+    "MINT_ADDRESS",
+  );
+})();
+```
